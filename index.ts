@@ -1,6 +1,25 @@
-// Import stylesheets
 import './style.css';
+import createNorthRenderer from './renderers/north-logo/renderer';
+import createImageRenderer from './images/image-renderer';
 
-// Write TypeScript code!
-const appDiv: HTMLElement = document.getElementById('app');
-appDiv.innerHTML = `<h1>TypeScript Starter</h1>`;
+const app = document.querySelector<HTMLDivElement>('#app')!;
+
+app.innerHTML = `
+  <canvas id="canvas" />
+`;
+
+const canvas = document.getElementById('canvas')! as HTMLCanvasElement;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const render = async () => {
+  const imageRenderer = await createImageRenderer(canvas);
+  const northRenderer = await createNorthRenderer(canvas);
+
+  window.requestAnimationFrame(() => {
+    northRenderer();
+    imageRenderer();
+  });
+};
+
+window.requestAnimationFrame(render);
